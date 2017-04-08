@@ -1,0 +1,17 @@
+{
+  "host": [
+    {
+      "url": "www.baidu.com",
+      "name": "baidu",
+      "log": false
+    },
+    {
+      "url": "www.google.com",
+      "name": "google",
+      "log": true
+    }
+  ],
+  "SCKEY":"http://sc.ftqq.com获取",
+  "times":10,
+  "loss":30
+}
