@@ -13,8 +13,6 @@ def ping_sever(j):
     command = 'ping '+url+' -c '+str(jo['times'])  # 可以直接在命令行中执行的命令
     r = os.popen(command)  # 执行该命令
     info = r.readlines()  # 读取命令行的输出到一个list
-    if len(info)<2:
-        return
     if j['log']:
         s = h
         for line in info:  # 按行遍历
@@ -42,12 +40,11 @@ def send(text,desp):
 
 
 jo=load_config()
+
 for l in jo['host']:
-    try:
-        list_ping = ping_sever(l)
-        str_ping_loss = list_ping[0].split(', ')[2]
-        int_ping_loss = int(str_ping_loss[:str_ping_loss.find('%')])  # 获取丢包率
-        if int_ping_loss > l['loss']:
-            send(l['name'] + u'-丢包率过高', u'丢包率为' + str(int_ping_loss)+'%')
-    except:
-        send(l['name'] + u'-无法ping通', u'请检查设置，地址为 '+l['url'])
+    list_ping = ping_sever(l)
+    str_ping_loss = list_ping[0].split(', ')[2]
+    int_ping_loss = int(str_ping_loss[:str_ping_loss.find('%')])  # 获取丢包率
+    if int_ping_loss > l['loss']:
+        send(l['name'] + u'-丢包率过高', u'丢包率为' + str(int_ping_loss) + '%')
+
