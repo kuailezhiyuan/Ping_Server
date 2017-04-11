@@ -38,13 +38,17 @@ def send(text,desp):
     desp=urllib.quote(desp.encode('utf-8'))
     urllib.urlopen('http://sc.ftqq.com/'+SCKEY+'.send?text='+text+'&desp='+desp)
 
+def get_int_loss(list):
+    list_ping = ping_sever(list)
+    str_ping_loss = list_ping[0].split(', ')[2]
+    return int(str_ping_loss[:str_ping_loss.find('%')])  # 获取丢包率
 
 jo=load_config()
 
 for l in jo['host']:
-    list_ping = ping_sever(l)
-    str_ping_loss = list_ping[0].split(', ')[2]
-    int_ping_loss = int(str_ping_loss[:str_ping_loss.find('%')])  # 获取丢包率
-    if int_ping_loss > l['loss']:
-        send(l['name'] + u'-丢包率过高', u'丢包率为' + str(int_ping_loss) + '%')
+    int_ping_loss=get_int_loss(l) #获取丢包率
+    if int_ping_loss > jo['loss']: #如果第一次ping丢包率大于阀值，进行第二次
+        int_ping_loss2 = get_int_loss(l) #第二次ping
+        if int_ping_loss2 > jo['loss']: #如果第二次也大于阀值，推送消息
+            send(l['name'] + u'-丢包率过高', u'两次Ping丢包率为' + str(int_ping_loss2)+u'%和'+str(int_ping_loss) + u'%')#使用sever酱推送消息
 
