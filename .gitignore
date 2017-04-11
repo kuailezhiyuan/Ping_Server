@@ -138,5 +138,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# log
-log/
+# log和配置文件
+log
+/config.json
